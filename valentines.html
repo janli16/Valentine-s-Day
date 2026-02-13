@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Happy Valentine's Day ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #1a0b2e;
+        }
+
+        /* Background image as separate element for better control */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('background.jpg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        /* For mobile - use cover instead of contain */
+        @media (max-width: 768px) {
+            body::after {
+                background-size: cover;
+            }
+        }
+
+        /* Background overlay for better text readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Starry Sky Animation */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Moon */
+        .moon {
+            position: fixed;
+            top: 10%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(145deg, #fef9e7 0%, #f9e79f 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 60px rgba(254, 249, 231, 0.8),
+                        0 0 100px rgba(254, 249, 231, 0.4),
+                        inset -10px -10px 20px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            animation: moonGlow 4s infinite ease-in-out;
+        }
+
+        @keyframes moonGlow {
+            0%, 100% { box-shadow: 0 0 60px rgba(254, 249, 231, 0.8), 0 0 100px rgba(254, 249, 231, 0.4); }
+            50% { box-shadow: 0 0 80px rgba(254, 249, 231, 1), 0 0 120px rgba(254, 249, 231, 0.6); }
+        }
+
+        /* Clouds */
+        .cloud {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            z-index: 1;
+            animation: float 20s infinite linear;
+        }
+
+        .cloud:before, .cloud:after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
+        }
+
+        /* Background Upload Control - Hidden since we auto-load */
+        .background-control {
+            display: none;
+        }
+
+        /* Main Content Container */
+        .container {
+            text-align: center;
+            z-index: 100;
+            position: relative;
+            margin-top: -25vh; /* Made higher as requested */
+        }
+
+        h1 {
+            color: #ffb3d9;
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(255, 179, 217, 0.8),
+                         0 0 40px rgba(255, 179, 217, 0.4);
+            animation: titleGlow 2s infinite ease-in-out;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.2;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 179, 217, 0.8), 0 0 40px rgba(255, 179, 217, 0.4); }
+            50% { text-shadow: 0 0 30px rgba(255, 179, 217, 1), 0 0 60px rgba(255, 179, 217, 0.6); }
+        }
+
+        /* Click Me Button - Now Envelope in Corner */
+        .click-btn {
+            position: fixed;
+            bottom: 25%;
+            left: 15%;
+            background: linear-gradient(145deg, #ff6b9d, #c9184a);
+            color: white;
+            border: none;
+            padding: 20px 25px;
+            font-size: 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .click-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+            background: linear-gradient(145deg, #ff85ad, #d62c5e);
+        }
+
+        .click-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .envelope-icon {
+            font-size: 2.5rem;
+            animation: envelopeBounce 2s infinite ease-in-out;
+        }
+
+        @keyframes envelopeBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .envelope-text {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Music Control - Hidden since we auto-load */
+        .music-control {
+            display: none;
+        }
+
+        /* Letter Modal */
+        .letter-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .letter-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .letter {
+            background: linear-gradient(145deg, #fff5f8, #ffe6f0);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: letterOpen 0.5s ease;
+            overflow-y: auto;
+        }
+
+        @keyframes letterOpen {
+            0% { transform: scale(0.5) rotateX(-90deg); opacity: 0; }
+            100% { transform: scale(1) rotateX(0); opacity: 1; }
+        }
+
+        .letter::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .letter::-webkit-scrollbar-track {
+            background: rgba(255, 179, 217, 0.1);
+            border-radius: 10px;
+        }
+
+        .letter::-webkit-scrollbar-thumb {
+            background: #ff6b9d;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #c9184a;
+            transform: rotate(90deg);
+        }
+
+        .letter-content {
+            color: #4a2454;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .letter-content h2 {
+            color: #c9184a;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .letter-content p {
+            margin-bottom: 15px;
+            text-indent: 30px;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 30px;
+            font-style: italic;
+            color: #ff6b9d;
+        }
+
+        /* Hearts Floating Animation */
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 30px;
+            color: #ff6b9d;
+            animation: floatHeart 8s infinite ease-in;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glitter/Sparkle overlay layer */
+        .glitter-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: twinkleStar 2s infinite ease-in-out;
+        }
+
+        @keyframes twinkleStar {
+            0%, 100% { 
+                opacity: 0.2; 
+                transform: scale(0.5);
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.5);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 1), 
+                            0 0 30px rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        .sparkle-pink {
+            background: #ffb3d9;
+            box-shadow: 0 0 10px rgba(255, 179, 217, 0.8);
+        }
+
+        @keyframes twinkleStar {
+            0%, 100% { 
+                opacity: 0.2; 
+                transform: scale(0.5);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.5);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin-top: -10vh;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+                max-width: 90%;
+            }
+            
+            .click-btn {
+                bottom: 22%;
+                left: 10%;
+                padding: 15px 20px;
+            }
+            
+            .envelope-icon {
+                font-size: 2rem;
+            }
+            
+            .envelope-text {
+                font-size: 0.8rem;
+            }
+            
+            .letter {
+                padding: 25px;
+                width: 95%;
+                max-height: 85vh;
+            }
+            
+            .letter-content {
+                font-size: 1rem;
+            }
+            
+            .letter-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .moon {
+                width: 60px;
+                height: 60px;
+                top: 5%;
+                right: 5%;
+            }
+            
+            .cloud {
+                display: none; /* Hide clouds on mobile for cleaner look */
+            }
+            
+            .container {
+                padding: 0 20px;
+            }
+        }
+
+        /* Even smaller phones */
+        @media (max-width: 480px) {
+            .container {
+                margin-top: -8vh;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .click-btn {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+            
+            .letter {
+                padding: 20px;
+            }
+            
+            .letter-content {
+                font-size: 0.95rem;
+            }
+            
+            .letter-content p {
+                text-indent: 15px;
+            }
+        }
+
+        /* Prevent zoom on mobile when clicking inputs */
+        @media (max-width: 768px) {
+            input, select, textarea, button {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Better touch targets for mobile */
+        @media (hover: none) and (pointer: coarse) {
+            .click-btn {
+                padding: 18px 22px;
+            }
+            
+            .envelope-icon {
+                font-size: 2.2rem;
+            }
+            
+            .close-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Glitter/Sparkle Overlay -->
+    <div class="glitter-container" id="glitterContainer"></div>
+
+    <!-- Moon -->
+    <div class="moon"></div>
+
+    <!-- Background Upload Control -->
+    <div class="background-control">
+        <label for="backgroundUpload">📷 Choose Background</label>
+        <input type="file" id="backgroundUpload" accept="image/*" onchange="loadBackground(event)">
+    </div>
+
+    <!-- Clouds -->
+    <div class="cloud" style="width: 100px; height: 50px; top: 20%; animation-duration: 25s;"></div>
+    <div class="cloud" style="width: 150px; height: 60px; top: 40%; animation-duration: 30s; animation-delay: -10s;"></div>
+    <div class="cloud" style="width: 120px; height: 55px; top: 60%; animation-duration: 35s; animation-delay: -20s;"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Happy Valentine's Day ❤️</h1>
+    </div>
+
+    <!-- Envelope Button -->
+    <button class="click-btn" onclick="openLetter()">
+        <span class="envelope-icon">💌</span>
+        <span class="envelope-text">For You</span>
+    </button>
+
+    <!-- Music Control -->
+    <div class="music-control">
+        <button id="playPauseBtn" onclick="toggleMusic()">▶</button>
+        <label for="musicUpload">Choose Music</label>
+        <input type="file" id="musicUpload" accept="audio/*" onchange="loadMusic(event)">
+    </div>
+
+    <!-- Letter Modal -->
+    <div class="letter-modal" id="letterModal">
+        <div class="letter">
+            <button class="close-btn" onclick="closeLetter()">×</button>
+            <div class="letter-content">
+                <h2>To My Dearest Valentine 💕</h2>
+                <p>
+                    On this special day, I wanted to take a moment to tell you how much you mean to me. 
+                    From the moment we met, you've brought light and joy into my life in ways I never 
+                    imagined possible.
+                </p>
+                <p>
+                    Every day with you is a gift. Your smile brightens even the darkest days, and your 
+                    laughter is the sweetest melody I've ever heard. You make ordinary moments extraordinary 
+                    just by being there.
+                </p>
+                <p>
+                    I am grateful for every second we spend together, every conversation we share, and every 
+                    dream we build. You are my best friend, my confidant, and my greatest adventure.
+                </p>
+                <p>
+                    Thank you for being exactly who you are. Thank you for accepting me, supporting me, and 
+                    loving me. I promise to cherish you today and always.
+                </p>
+                <p>
+                    Happy Valentine's Day, my love. Here's to many more beautiful moments together under the 
+                    stars, just like this.
+                </p>
+                <div class="signature">
+                    Forever yours,<br>
+                    With all my love ❤️
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop autoplay src="music.mp3"></audio>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Generate blinking glitter sparkles
+        const glitterContainer = document.getElementById('glitterContainer');
+        
+        function createGlitter() {
+            // Reduce sparkles on mobile for better performance
+            const isMobile = window.innerWidth <= 768;
+            const sparkleCount = isMobile ? 50 : 100;
+            
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = Math.random() > 0.7 ? 'sparkle sparkle-pink' : 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparkle.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                
+                // Vary sizes
+                const size = Math.random() * 4 + 2;
+                sparkle.style.width = size + 'px';
+                sparkle.style.height = size + 'px';
+                
+                glitterContainer.appendChild(sparkle);
+            }
+        }
+        
+        createGlitter();
+
+        // Floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        // Reduce heart frequency on mobile
+        const isMobile = window.innerWidth <= 768;
+        setInterval(createHeart, isMobile ? 3000 : 1500);
+
+        // Auto-play music when page loads
+        const audio = document.getElementById('bgMusic');
+        
+        // Try to play music automatically
+        // Note: Some browsers block autoplay, user may need to interact with page first
+        window.addEventListener('load', () => {
+            audio.play().catch(error => {
+                console.log('Autoplay prevented. Click anywhere to start music.');
+                // Add click listener to start music on first user interaction
+                document.body.addEventListener('click', () => {
+                    audio.play();
+                }, { once: true });
+            });
+        });
+
+        // Letter modal functions
+        function openLetter() {
+            document.getElementById('letterModal').classList.add('active');
+        }
+
+        function closeLetter() {
+            document.getElementById('letterModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('letterModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLetter();
+            }
+        });
+    </script>
+</body>
+</html>
